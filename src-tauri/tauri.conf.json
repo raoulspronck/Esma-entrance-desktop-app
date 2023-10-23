@@ -48,7 +48,7 @@
       ],
       "identifier": "entrance.desktop.app.exalise",
       "longDescription": "Software writen by exalise to display on the entry of the factory.",
-      "resources": ["binarieresources/*"],
+      "resources": [],
       "shortDescription": "",
       "targets": "all",
       "windows": {

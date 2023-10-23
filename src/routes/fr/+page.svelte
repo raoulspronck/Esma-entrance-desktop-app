@@ -222,6 +222,12 @@
         }}>Titgemeyer</button
       >
       <button
+      on:click={() => {
+        name = "Claasen";
+        sendNotification();
+      }}>Claassen</button
+    >
+      <button
         on:click={() => {
           name = "MCB";
           sendNotification();

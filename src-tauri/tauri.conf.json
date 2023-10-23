@@ -12,7 +12,24 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "process": {
+        "all": false,
+        "exit": true,
+        "relaunch": false,
+        "relaunchDangerousAllowSymlinkMacos": false
+      },
+      "path": {
+        "all": true
+      },
+      "protocol": {
+        "all": true,
+        "asset": true,
+        "assetScope": ["**"]
+      },
+      "fs": {
+        "all": true,
+        "scope": ["*"]
+      }
     },
     "bundle": {
       "active": true,
@@ -30,28 +47,35 @@
         "icons/icon.ico"
       ],
       "identifier": "entrance.desktop.app.exalise",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
+      "longDescription": "Software writen by exalise to display on the entry of the factory.",
+      "resources": ["binarieresources/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "",
+        "wix": {
+          "language": ["nl-NL"]
+        },
+        "webviewInstallMode": {
+          "type": "offlineInstaller"
+        }
       }
     },
     "security": {
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://gist.githubusercontent.com/raoulspronck/cac9640f0e1111689cf4ede2b6e916d6/raw/"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2MDU2RjYwNzI2NDcxMjAKUldRZ2NXUnlZRzhGcGhCRUx3NndYZ3RhWlNrMENiMEFsQXZlRy82WHNBdStmaWZZY0FsSTFmeGYK",
+      "windows": {
+        "installMode": "basicUi"
+      }
     },
     "windows": [
       {

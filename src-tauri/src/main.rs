@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use rumqttc::{AsyncClient, Event, LastWill, MqttOptions, Packet, QoS};
+use rumqttc::{AsyncClient, Event, LastWill, MqttOptions, Packet, QoS, ConnAck, ConnectReturnCode};
 use serde::{Deserialize, Serialize};
 use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::{Manager, State};
@@ -150,6 +150,27 @@ async fn main() {
                                     .await
                                     .unwrap();
                                 connected = true;
+                            }
+
+                            if let Event::Incoming(Packet::PingResp) = s {
+                                main_window.emit("ping", "check").unwrap();
+                            }
+
+                            if let Event::Incoming(Packet::ConnAck(ConnAck {
+                                session_present: _,
+                                code,
+                            })) = s
+                            {
+                                if let ConnectReturnCode::Success = code {
+                                    client
+                                        .subscribe("exalise/messages/#", QoS::AtMostOnce)
+                                        .await
+                                        .unwrap();
+                                    client
+                                        .subscribe("exalise/lastwill/#", QoS::AtMostOnce)
+                                        .await
+                                        .unwrap();
+                                }
                             }
 
                             if let Event::Incoming(Packet::Publish(p)) = s {

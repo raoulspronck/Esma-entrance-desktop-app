@@ -75,6 +75,11 @@
 
               updatedTime = time;
 
+              let geholpen = document.getElementById("geholpen");
+              if (geholpen != null) {
+                geholpen.style.display = "none";
+              }
+
               let onderweg = document.getElementById("onderweg");
               if (onderweg != null) {
                 onderweg.style.display = "flex";
@@ -123,6 +128,22 @@
 
       window.location.href = "/";
     }, 5000);
+  };
+
+  const geholpen = () => {
+    // send alert accepted
+    invoke("send_message_to_own_topic", {
+      datapoint: topic,
+      value: `${message} ${name}./ alert accepted`,
+    })
+      .then((_e) => {
+        // go to goodbey screen
+        goodbyeScreen();
+        message = "";
+        name = "";
+        topic = "";
+      })
+      .catch((e) => console.log(e));
   };
 </script>
 
@@ -190,7 +211,7 @@
 
     <button
       on:click={() => {
-        topic = "Leiding gevende";
+        topic = "Leiding-gevende";
         message = "Leiding gevende gevraagd aan de poort: ";
         getName();
       }}>Ik zou graag de leiding gevende willen spreken.</button
@@ -231,7 +252,6 @@
         }}>Claassen</button
       >
 
-
       <button
         on:click={() => {
           name = "MCB";
@@ -247,7 +267,7 @@
     </div>
   </div>
 
-  <div class="status-menu" id="status-menu">
+  <div class="status-menu" id="status-menu" style="position: relative;">
     <div style="display: flex; flex-direction: column; align-items: center;">
       <div style="width: 300px;">
         <Loader />
@@ -260,6 +280,10 @@
       <h3 style="color: black; display: none" id="melding2">
         <span>{updatedTime}</span> Melding verstuurd. Even geduld.
       </h3>
+
+      <button id="geholpen" on:click={geholpen} style="display: block;"
+        >Ik ben geholpen of hoef niet meer geholpen te worden.</button
+      >
 
       <div
         id="onderweg"
@@ -544,5 +568,37 @@
 
   button:hover {
     box-shadow: rgba(253, 76, 0, 0.5) 0 3px 8px;
+  }
+
+  .status-menu button {
+    font-size: 20px;
+    font-weight: 400;
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #c82c3e, #a02c3f);
+    border-radius: 6px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue",
+      Arial, sans-serif;
+    height: 60px;
+    line-height: 60px;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    pointer-events: auto;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    vertical-align: top;
+    white-space: nowrap;
+    width: fit-content;
+    z-index: 9;
+    border: 0;
+    transition: box-shadow 0.2s;
+    margin-top: 30px;
   }
 </style>

@@ -1,88 +1,121 @@
-<main class="main">
-  <div class="aanmeld-row">
-    <div class="language-row">
-      <img src="/icons8-netherlands-96.png" alt="Nederland" />
-      <div class="language-text">
-        <h2>Welkom bij Esma!</h2>
-        <a href="/nl">
-          <button class="aanmeld-button"
-            >Klik hier alstublieft om u aan te melden.</button
-          >
-        </a>
-      </div>
-    </div>
+<script>
+  import { listen } from "@tauri-apps/api/event";
+  import { onMount } from "svelte";
+  import { exit } from "@tauri-apps/api/process";
 
-    <div class="language-row">
-      <img src="/icons8-great-britain-96.png" alt="UK" />
-      <div class="language-text">
-        <h2>Welcome at Esma!</h2>
-        <a href="/en">
-          <button class="aanmeld-button">Please, click here to register.</button
-          >
-        </a>
-      </div>
-    </div>
+  let time = new Date().getTime();
+  let intervalTime = 0;
 
-    <div class="language-row">
-      <img src="/icons8-germany-96.png" alt="UK" />
-      <div class="language-text">
-        <h2>Willkommen bei Esma!</h2>
-        <a href="/ge">
-          <button class="aanmeld-button"
-            >Bitte klicken Sie hier, um sich zu registrieren.</button
-          >
-        </a>
-      </div>
-    </div>
+  // checks connection
+  onMount(() => {
+    listen("ping", (event) => {
+      time = new Date().getTime();
+      intervalTime = 0;
+    });
+  });
 
-    <div class="language-row">
-      <img src="/icons8-france-96.png" alt="France" />
-      <div class="language-text">
-        <h2>Bonjour chez Esma!</h2>
-        <a href="/fr">
-          <button class="aanmeld-button"
-            >Cliquez ici pour vous inscrire, merci.</button
-          >
-        </a>
-      </div>
-    </div>
+  setInterval(() => {
+    intervalTime = Math.round((new Date().getTime() - time) / 1000);
+  }, 1000);
+</script>
 
-    <div class="language-row">
-      <img src="/icons8-poland-96.png" alt="Poland" />
-      <div class="language-text">
-        <h2>Witamy w Esma!</h2>
-        <a href="/po">
-          <button class="aanmeld-button"
-            >Kliknij tutaj, aby się zarejestrować.</button
-          >
-        </a>
-      </div>
-    </div>
-
-    <div class="language-row">
-      <img src="/icons8-romania-96.png" alt="Romania" />
-      <div class="language-text">
-        <h2>Bun venit la Esma!</h2>
-        <a href="/ro">
-          <button class="aanmeld-button"
-            >Vă rugăm să faceți clic aici pentru a vă înregistra.</button
-          >
-        </a>
-      </div>
-    </div>
-
-    <div class="language-row">
-      <img src="/icons8-bulgaria-96.png" alt="Bulgaria" />
-      <div class="language-text">
-        <h2>Добре дошла при Есма!</h2>
-        <a href="/bu">
-          <button class="aanmeld-button"
-            >Моля, щракнете тук, за да се регистрирате.</button
-          >
-        </a>
-      </div>
-    </div>
+<main class="main" style="position: relative;">
+  <div style="position: absolute; top: 0px; right: 0px; ">
+    <button
+      style="width: 50px; height: 50px; background-color: transparent; border: none;"
+      on:click={async () => await exit(1)}
+    >
+      -{intervalTime}
+    </button>
   </div>
+
+  {#if intervalTime < 10}
+    <div class="aanmeld-row">
+      <div class="language-row">
+        <img src="/icons8-netherlands-96.png" alt="Nederland" />
+        <div class="language-text">
+          <h2>Welkom bij Esma!</h2>
+          <a href="/nl">
+            <button class="aanmeld-button"
+              >Klik hier alstublieft om u aan te melden.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-great-britain-96.png" alt="UK" />
+        <div class="language-text">
+          <h2>Welcome at Esma!</h2>
+          <a href="/en">
+            <button class="aanmeld-button"
+              >Please, click here to register.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-germany-96.png" alt="UK" />
+        <div class="language-text">
+          <h2>Willkommen bei Esma!</h2>
+          <a href="/ge">
+            <button class="aanmeld-button"
+              >Bitte klicken Sie hier, um sich zu registrieren.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-france-96.png" alt="France" />
+        <div class="language-text">
+          <h2>Bonjour chez Esma!</h2>
+          <a href="/fr">
+            <button class="aanmeld-button"
+              >Cliquez ici pour vous inscrire, merci.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-poland-96.png" alt="Poland" />
+        <div class="language-text">
+          <h2>Witamy w Esma!</h2>
+          <a href="/po">
+            <button class="aanmeld-button"
+              >Kliknij tutaj, aby się zarejestrować.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-romania-96.png" alt="Romania" />
+        <div class="language-text">
+          <h2>Bun venit la Esma!</h2>
+          <a href="/ro">
+            <button class="aanmeld-button"
+              >Vă rugăm să faceți clic aici pentru a vă înregistra.</button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="language-row">
+        <img src="/icons8-bulgaria-96.png" alt="Bulgaria" />
+        <div class="language-text">
+          <h2>Добре дошла при Есма!</h2>
+          <a href="/bu">
+            <button class="aanmeld-button"
+              >Моля, щракнете тук, за да се регистрирате.</button
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+  {/if}
 </main>
 
 <style>

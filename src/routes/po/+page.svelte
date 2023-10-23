@@ -75,6 +75,11 @@
 
               updatedTime = time;
 
+              let geholpen = document.getElementById("geholpen");
+              if (geholpen != null) {
+                geholpen.style.display = "none";
+              }
+
               let onderweg = document.getElementById("onderweg");
               if (onderweg != null) {
                 onderweg.style.display = "flex";
@@ -123,6 +128,22 @@
 
       window.location.href = "/";
     }, 5000);
+  };
+
+  const geholpen = () => {
+    // send alert accepted
+    invoke("send_message_to_own_topic", {
+      datapoint: topic,
+      value: `${message} ${name}./ alert accepted`,
+    })
+      .then((_e) => {
+        // go to goodbey screen
+        goodbyeScreen();
+        message = "";
+        name = "";
+        topic = "";
+      })
+      .catch((e) => console.log(e));
   };
 </script>
 
@@ -189,7 +210,7 @@
 
     <button
       on:click={() => {
-        topic = "Leiding gevende";
+        topic = "Leiding-gevende";
         message = "Leiding gevende gevraagd aan de poort: ";
         getName();
       }}>Chciałbym porozmawiać z menadżerem.</button
@@ -228,11 +249,11 @@
         }}>MCB</button
       >
       <button
-      on:click={() => {
-        name = "Claasen";
-        sendNotification();
-      }}>Claassen</button
-    >
+        on:click={() => {
+          name = "Claasen";
+          sendNotification();
+        }}>Claassen</button
+      >
       <button
         on:click={() => {
           name = "Mayfran";
@@ -255,6 +276,10 @@
       <h3 style="color: black; display: none" id="melding2">
         <span>{updatedTime}</span> Powiadomienie wysłane. Cierpliwość.
       </h3>
+
+      <button id="geholpen" on:click={geholpen} style="display: block;"
+        >Otrzymałem pomoc lub już jej nie potrzebuję.</button
+      >
 
       <div
         id="onderweg"

@@ -134,7 +134,6 @@ async fn main() {
 
                     match notification {
                         Ok(s) => {
-                            println!("{:?}", s);
                             if !connected {
                                 CONNECTED_TO_EXALISE.store(true, Ordering::Relaxed);
 

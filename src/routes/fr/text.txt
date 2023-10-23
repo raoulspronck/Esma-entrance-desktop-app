@@ -1,0 +1,31 @@
+Choisissez l'une des options ci-dessous
+
+Je viens décharger et j'ai besoin d'un cariste.
+
+Je suis ici pour récupérer quelque chose.
+
+Je dépose un colis et j'ai besoin que quelqu'un signe.
+
+Je dépose un colis et je n'ai besoin de personne.
+
+J'aimerais parler au directeur.
+
+Entrez le nom de votre entreprise ou votre nom personnel.
+
+Nom
+
+suivante
+
+Envoyer une notification... . Patience.
+
+Notification envoyée. Patience.
+
+Quelqu'un est en route ! Patience.
+
+Cliquez ici si vous avez été aidé.
+
+Veuillez laisser votre colis ici.
+
+Cliquez ici une fois que vous avez placé le colis.
+
+Merci! Au nom de toute l'équipe Esma, bonne journée !

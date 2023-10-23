@@ -1,0 +1,31 @@
+Choose one of the options below
+
+I am coming to unload and need a forklift driver.
+
+I'm here to pick something up.
+
+I'm dropping off a package and need someone to sign for it.
+
+I'm dropping off a package and I don't need anyone.
+
+I would like to speak to the manager.
+
+Enter your company name or personal name.
+
+Name
+
+Next one
+
+Send notification... . Patience.
+
+Notification sent. Patience.
+
+Someone's on the way! Patience.
+
+Click here if you have been helped.
+
+Please leave your package here.
+
+Click here once you have placed the package.
+
+Thank you! On behalf of the entire Esma team, have a nice day!

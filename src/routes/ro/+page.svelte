@@ -217,9 +217,9 @@
       >
       <button
         on:click={() => {
-          name = "Titgemayer";
+          name = "Titgemeyer";
           sendNotification();
-        }}>Titgemayer</button
+        }}>Titgemeyer</button
       >
       <button
         on:click={() => {

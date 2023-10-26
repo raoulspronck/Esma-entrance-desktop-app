@@ -101,7 +101,7 @@
 </script>
 
 <main class="main" style="position: relative;">
-  <div style="position: absolute; top: 0px; right: 0px; ">
+  <div style="position: absolute; bottom: 0px; right: 0px; ">
     <button
       style="width: 50px; height: 50px; background-color: transparent; border: none;"
       on:click={async () => await exit(1)}
@@ -281,6 +281,7 @@
     min-width: 340px;
     max-width: 340px;
     margin-top: 30px;
+    margin-left: auto;
   }
 
   .Openingsurenbox {
@@ -328,13 +329,14 @@
   .language-row {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
 
   .language-row img {
-    height: 96px;
-    width: 96px;
-    margin-right: 5px;
+    height: 110px;
+    width: 110px;
+    margin-right: 15px;
+    margin-left: 10px;
   }
 
   .language-text {

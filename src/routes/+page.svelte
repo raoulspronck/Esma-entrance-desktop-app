@@ -2,16 +2,97 @@
   import { listen } from "@tauri-apps/api/event";
   import { onMount } from "svelte";
   import { exit } from "@tauri-apps/api/process";
+  import { invoke } from "@tauri-apps/api/tauri";
 
   let time = new Date().getTime();
   let intervalTime = 0;
+  /**
+   * @type {any[]}
+   */
+  let holidays = [];
+
+  function formatCurrentTimeAndDate() {
+    const now = new Date();
+
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    const day = now.getDate().toString().padStart(2, "0");
+    const month = now.getMonth(); // Note: Month is 0-based, so we add 1.
+    const year = now.getFullYear();
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const formattedMonth = monthNames[month];
+
+    const formattedDateTime = ` ${hours}:${minutes}u ${day} ${formattedMonth} ${year}`;
+
+    return formattedDateTime;
+  }
+
+  /**
+   * @param {string} time
+   */
+  function formateDate(time) {
+    const day = time.substr(8, 2); // Extract the day part
+    const month = time.substr(5, 2); // Extract the month part
+
+    // Convert the month part to the first 3 letters of the month
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const formattedMonth = monthNames[parseInt(month, 10) - 1];
+
+    return `${day} ${formattedMonth}`;
+  }
+
+  let formattedTimeDate = formatCurrentTimeAndDate();
 
   // checks connection
   onMount(() => {
+    invoke("get_hollidays")
+      .then((e) => {
+        holidays = [];
+        let holidaysJSON = JSON.parse(e);
+        for (let i = 0; i < holidaysJSON.length; i++) {
+          holidays.push({
+            fromDate: formateDate(holidaysJSON[i].date),
+            toDate: formateDate(holidaysJSON[i].toDate),
+            reason: holidaysJSON[i].reason,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+
     listen("ping", (event) => {
       time = new Date().getTime();
       intervalTime = 0;
     });
+
+    setInterval(() => {
+      formattedTimeDate = formatCurrentTimeAndDate();
+    }, 10000);
   });
 
   setInterval(() => {
@@ -116,6 +197,65 @@
       </div>
     </div>
   {/if}
+
+  <div class="column2">
+    <div style="font-size: 38px; font-weight: 200;">
+      <span>{formattedTimeDate}</span>
+    </div>
+    <div class="Openingsurenbox" style="margin-top: 20px;">
+      <span class="title">Pauzes / Breaks</span>
+      <div class="daytime">
+        <div class="time" style="margin-left: 0; text-align: left;">
+          <span>10:00 - 10:20</span>
+          <span>12:30 - 13:00</span>
+        </div>
+      </div>
+    </div>
+    <div class="Openingsurenbox" style="margin-top: 40px;">
+      <span class="title">Openingsuren / Openingtimes</span>
+      <div class="daytime">
+        <div class="day">
+          <span>Ma / Mon:</span>
+          <span>Di / Tue:</span>
+          <span>Wo / Wen:</span>
+          <span>Do / Thu:</span>
+          <span>Vr / Fri:</span>
+          <span>Za / Sat:</span>
+          <span>Zo / Sun:</span>
+        </div>
+        <div class="time">
+          <span>7:00 - 15:45</span>
+          <span>7:00 - 15:45</span>
+          <span>7:00 - 15:45</span>
+          <span>7:00 - 15:45</span>
+          <span>7:00 - 15:00</span>
+          <span>Gesloten / Closed</span>
+          <span>Gesloten / Closed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="Openingsurenbox" style="margin-top: 40px;">
+      <span class="title">Vakanties / Hollidays</span>
+      <div class="daytime">
+        <div class="day">
+          {#each holidays as holiday, key (key)}
+            <span
+              >{holiday.fromDate}
+              {holiday.fromDate === holiday.toDate
+                ? ""
+                : `- ${holiday.toDate}`}</span
+            >
+          {/each}
+        </div>
+        <div class="time">
+          {#each holidays as holiday, key (key)}
+            <span>{holiday.reason}</span>
+          {/each}
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 <style>
@@ -133,23 +273,68 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    display: flex;
+  }
+
+  .column2 {
+    min-width: 340px;
+    max-width: 340px;
+    margin-top: 30px;
+  }
+
+  .Openingsurenbox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 400;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue",
+      Arial, sans-serif;
+    margin-bottom: 20px;
+    background-color: initial;
+    background-image: linear-gradient(-180deg, #c82c3e, #a02c3f);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .daytime {
+    display: flex;
+  }
+
+  .day {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .time {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    text-align: right;
+    font-size: 16px;
   }
 
   .aanmeld-row {
-    padding-top: 10px;
-    padding-left: 30px;
+    padding-top: 20px;
+    padding-left: 5px;
   }
 
   .language-row {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .language-row img {
     height: 96px;
     width: 96px;
-    margin-right: 20px;
+    margin-right: 5px;
   }
 
   .language-text {
@@ -158,12 +343,14 @@
   }
 
   .language-text h2 {
-    font-size: 35px;
+    font-size: 30px;
   }
 
   .aanmeld-button {
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 600;
+    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue",
+      Arial, sans-serif;
     background-color: initial;
     background-image: linear-gradient(-180deg, #c82c3e, #a02c3f);
     border-radius: 6px;
@@ -171,13 +358,11 @@
     color: #ffffff;
     cursor: pointer;
     display: inline-block;
-    font-family: Inter, -apple-system, system-ui, Roboto, "Helvetica Neue",
-      Arial, sans-serif;
-    height: 50px;
-    line-height: 50px;
+    height: 45px;
+    line-height: 45px;
     outline: 0;
     overflow: hidden;
-    padding: 0 20px;
+    padding: 0 10px;
     pointer-events: auto;
     position: relative;
     text-align: center;

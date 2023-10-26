@@ -92,6 +92,7 @@ async fn main() {
     let device_key = exalise_settings.mqtt_settings.device_key.clone();
     let device_key_lastwill = device_key.clone();
     let device_key_clone = device_key_lastwill.clone();
+    let device_key_clone_clone = device_key_lastwill.clone();
 
     let mqtt_key = exalise_settings.mqtt_settings.mqtt_key.clone();
     let mqtt_secret = exalise_settings.mqtt_settings.mqtt_secret.clone();
@@ -121,6 +122,50 @@ async fn main() {
         .subscribe(format!("exalise/messages/{}/#", device_key_clone), QoS::AtMostOnce)
         .await
         .unwrap();
+
+
+    let http_key = exalise_settings.http_settings.http_key.clone();
+    let http_secret = exalise_settings.http_settings.http_secret.clone();
+    let http_client = reqwest::Client::new();
+    let response = http_client
+        .get("https://api.exalise.com/api/getisdayoff")
+        .header("x-api-key", http_key)
+        .header("x-api-secret", http_secret)
+        .header("x-master-device-key", device_key_clone_clone)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await;
+
+    match response {
+        Ok(res) => {
+            if res == "True" {
+                // Shutdown computer
+                if cfg!(target_os = "windows") {
+                    // Windows
+                    Command::new("shutdown")
+                        .args(&["/s", "/t", "0"])
+                        .output()
+                        .expect("Failed to shut down the computer");
+                } else if cfg!(target_os = "linux") {
+                    // Linux
+                    Command::new("shutdown")
+                        .args(&["-h", "now"])
+                        .output()
+                        .expect("Failed to shut down the computer");
+                } else if cfg!(target_os = "macos") {
+                    // macOS
+                    Command::new("shutdown")
+                        .args(&["-h", "now"])
+                        .output()
+                        .expect("Failed to shut down the computer");
+                }
+                
+            }
+        },
+        Err(err) => println!("{}" ,err),
+    }
 
     tauri::Builder::default()
         .manage(MqttClient(Mutex::new(client_clone)))
@@ -254,7 +299,7 @@ async fn main() {
             Ok(())
         })
         .plugin(tauri_plugin_store::Builder::default().build())
-        .invoke_handler(tauri::generate_handler![send_message, send_message_to_own_topic])
+        .invoke_handler(tauri::generate_handler![send_message, send_message_to_own_topic, get_hollidays])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -322,5 +367,30 @@ async fn send_message(
         Err(_err) => {
             return Err(false);
         }
+    }
+}
+
+
+#[tauri::command(async)]
+async fn get_hollidays(exalise_settings: State<'_, ExaliseSettings>) -> Result<String, String> {
+    let device_key = exalise_settings.mqtt_settings.device_key.clone();
+    let http_key = exalise_settings.http_settings.http_key.clone();
+    let http_secret = exalise_settings.http_settings.http_secret.clone();
+
+    let client = reqwest::Client::new();
+    let response = client
+        .get("https://api.exalise.com/api/gethollidays")
+        .header("x-api-key", http_key)
+        .header("x-api-secret", http_secret)
+        .header("x-master-device-key", device_key)
+        .send()
+        .await
+        .unwrap()
+        .text()
+        .await;
+
+    match response {
+        Ok(res) => return Ok(res.into()),
+        Err(_err) => return Err("[]".into()),
     }
 }

@@ -199,7 +199,7 @@
   {/if}
 
   <div class="column2">
-    <div style="font-size: 38px; font-weight: 200;">
+    <div style="font-size: 35px; font-weight: 200;">
       <span>{formattedTimeDate}</span>
     </div>
     <div class="Openingsurenbox" style="margin-top: 20px;">

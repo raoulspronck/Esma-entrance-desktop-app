@@ -220,7 +220,13 @@
   <div class="get-name-menu" id="get-name-menu">
     <h4>Introduceți numele companiei sau numele personal.</h4>
     <div>
-      <input id="bedrijfsnaam-input" placeholder="Nume" bind:value={name} />
+      <input
+        id="bedrijfsnaam-input"
+        placeholder="Nume"
+        bind:value={name}
+        autocomplete="off"
+        aria-autocomplete="none"
+      />
       <button on:click={sendNotification}>Următorul</button>
     </div>
     <div class="quick-buttons-div">

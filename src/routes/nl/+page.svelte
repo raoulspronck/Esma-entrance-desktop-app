@@ -221,7 +221,13 @@
   <div class="get-name-menu" id="get-name-menu">
     <h4>Geef uw bedrijfsnaam of persoonlijke naam op.</h4>
     <div>
-      <input id="bedrijfsnaam-input" placeholder="Naam" bind:value={name} />
+      <input
+        id="bedrijfsnaam-input"
+        placeholder="Naam"
+        bind:value={name}
+        autocomplete="off"
+        aria-autocomplete="none"
+      />
       <button on:click={sendNotification}>Volgende</button>
     </div>
 

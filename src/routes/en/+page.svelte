@@ -223,7 +223,13 @@
       name.
     </h4>
     <div>
-      <input id="bedrijfsnaam-input" placeholder="Name" bind:value={name} />
+      <input
+        id="bedrijfsnaam-input"
+        placeholder="Name"
+        bind:value={name}
+        autocomplete="off"
+        aria-autocomplete="none"
+      />
       <button on:click={sendNotification}>Next</button>
     </div>
     <div class="quick-buttons-div">

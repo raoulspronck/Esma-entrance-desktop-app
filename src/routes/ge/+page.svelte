@@ -221,7 +221,13 @@
   <div class="get-name-menu" id="get-name-menu">
     <h4>Geben Sie Ihren Firmennamen oder persönlichen Namen ein.</h4>
     <div>
-      <input id="bedrijfsnaam-input" placeholder="Name" bind:value={name} />
+      <input
+        id="bedrijfsnaam-input"
+        placeholder="Name"
+        bind:value={name}
+        autocomplete="off"
+        aria-autocomplete="none"
+      />
       <button on:click={sendNotification}>Nächstes</button>
     </div>
     <div class="quick-buttons-div">

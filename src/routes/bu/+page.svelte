@@ -220,7 +220,13 @@
   <div class="get-name-menu" id="get-name-menu">
     <h4>Въведете името на вашата фирма или лично име.</h4>
     <div>
-      <input id="bedrijfsnaam-input" placeholder="Име" bind:value={name} />
+      <input
+        id="bedrijfsnaam-input"
+        placeholder="Име"
+        bind:value={name}
+        autocomplete="off"
+        aria-autocomplete="none"
+      />
       <button on:click={sendNotification}>Следващ</button>
     </div>
     <div class="quick-buttons-div">
